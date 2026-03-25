@@ -1,0 +1,13 @@
+name: ecommerce
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - plotly
+  - ipykernel
+  - scipy
+  - seaborn
