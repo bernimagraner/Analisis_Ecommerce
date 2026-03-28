@@ -8,6 +8,7 @@ dependencies:
   - scikit-learn
   - matplotlib
   - plotly
+  - nbformat>=4.2
   - ipykernel
   - scipy
   - seaborn

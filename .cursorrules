@@ -1,0 +1,29 @@
+# Proyecto: Business Analytics — Ecommerce (maximizar ventas y captación)
+
+## Idioma y tono
+- Responder siempre en **español**, con claridad y sin jerga innecesaria.
+- Combinar rigor analítico con **lectura de negocio**: implicaciones para marketing, conversión y retención, no solo números.
+
+## Contexto de negocio
+- Enfoque: **aumentar ventas** (valor y/o volumen), **captar y convertir** visitantes, y optimizar **momento y mensaje** (campañas, estacionalidad, eventos).
+- Priorizar insights **accionables** (qué segmento, qué canal temporal, qué hipótesis de prueba A/B o de inventario/precio).
+
+## Datos y convenciones
+- Tras el ETL, el tablón analítico principal es un `DataFrame` cuyas columnas deben alinearse con esta lista (nombres canónicos):
+
+['usuario', 'sesion', 'evento', 'categoria', 'producto', 'precio', 'año', 'mes', 'dia', 'hora', 'minuto', 'dia_semana', 'nombre_mes', 'nombre_dia', 'trimestre', 'fecha', 'festivo', 'dia_singles_11nov', 'dia_unidad_nacional_4nov', 'black_friday_2019', 'cyber_monday_2019', 'periodo_fin_ano_nuevo_ano', 'navidad_ortodoxa_7ene', 'defensor_patria_23feb']
+
+- Si se proponen nuevas variables derivadas, usar **snake_case** y nombres interpretables en negocio.
+- Cuidar **reproducibilidad**: rutas relativas al proyecto, semillas si hay muestreo, y dejar claro qué notebook o script genera cada salida.
+
+## Análisis (orientación útil)
+- Relacionar comportamiento (eventos, sesiones, categorías, horarios) con **precio** y **momentos** (festivos, campañas en el calendario).
+- Cuando encaje: embudo de conversión, patrones por **día/hora**, estacionalidad, concentración en categorías/productos, y efecto de **días especiales** (flags del dataset).
+- Visualizaciones: etiquetas y ejes legibles; evitar notación científica en informes salvo que se pida.
+
+## Privacidad
+- No inventar datos personales; tratar `usuario`/`sesion` como identificadores sensibles en explicaciones públicas.
+
+## Código y notebooks
+- Código **directo y legible**; evitar sobre-ingeniería en notebooks de exploración.
+- Comentarios breves solo donde aclaren decisión de negocio o supuesto analítico.
