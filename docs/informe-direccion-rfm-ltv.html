@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Informe ejecutivo · RFM &amp; LTV · Ecommerce cosmética</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a222d;
+      --surface2: #232d3b;
+      --text: #e8edf4;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent2: #a78bfa;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #fb7185;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 16px;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    header.hero {
+      text-align: center;
+      padding: 2.5rem 1rem 3rem;
+      background: linear-gradient(165deg, var(--surface) 0%, var(--bg) 55%);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(1.85rem, 4vw, 2.6rem);
+      margin: 0 0 0.75rem;
+      line-height: 1.15;
+    }
+    .subtitle { color: var(--muted); max-width: 36rem; margin: 0 auto; font-size: 1.05rem; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2 span.num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent2);
+      background: rgba(167, 139, 250, 0.12);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+    p.lead { color: var(--muted); font-size: 1.02rem; margin: 0 0 1.25rem; }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.25rem;
+    }
+    .kpi .val { font-size: 1.65rem; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+    .kpi .lbl { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.35rem; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem 1.5rem;
+    }
+    .chart-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .chart-h { height: 260px; position: relative; }
+    .insight-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(167, 139, 250, 0.06));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      margin: 1.5rem 0;
+    }
+    .insight-box strong { color: var(--success); }
+    .actions {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .action {
+      background: var(--surface2);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.15rem;
+    }
+    .action h4 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--text); }
+    .action p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      margin-right: 0.35rem;
+    }
+    .tag-p1 { background: rgba(251, 113, 133, 0.2); color: #fda4af; }
+    .tag-p2 { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
+    .tag-p3 { background: rgba(52, 211, 153, 0.15); color: #6ee7b7; }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 1rem 0;
+    }
+    table.data th, table.data td {
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    }
+    table.data th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      .chart-card, .kpi, .action, .insight-box { border: 1px solid #ccc; }
+      :root { --text: #111; --muted: #444; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="badge">Dirección · Business analytics</div>
+    <h1>Segmentación RFM y LTV</h1>
+    <p class="subtitle">Ecommerce cosmética: lectura estratégica de la base de clientes y acciones CRO alineadas con el plan del proyecto.</p>
+  </header>
+
+  <div class="wrap">
+    <p class="lead">
+      El objetivo del encargo es <strong>incrementar visitas, conversión y ticket medio</strong> mediante análisis transaccional y activos como RFM, cohortes y LTV.
+      Los números siguientes provienen del análisis en <code>02_AnalisisInsights.ipynb</code> y el marco definido en <code>proyecto-objetivos.md</code>.
+    </p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="val">11.040</div><div class="lbl">Clientes</div></div>
+      <div class="kpi"><div class="val">56,30 €</div><div class="lbl">Gasto medio</div></div>
+      <div class="kpi"><div class="val">~31 €</div><div class="lbl">LTV3M mediano</div></div>
+      <div class="kpi"><div class="val">78,8 %</div><div class="lbl">Una sola compra (F=1)</div></div>
+    </div>
+
+    <div class="insight-box">
+      <strong>Mensaje clave:</strong> la base es volumétrica pero frágil en recurrencia. Casi cuatro de cada cinco clientes solo compran una vez, mientras que el quintil de mayor gasto (M=5) concentra casi el 59 % de los ingresos. El crecimiento pasa por <strong>segunda compra</strong> y por <strong>tratar distinto</strong> a VIP, “medio” valioso y cola inactiva.
+    </div>
+
+    <h2><span class="num">01</span> Ingresos por dimensión RFM</h2>
+    <p class="lead">Comparación del reparto del % de ingresos: recencia (R), frecuencia (F) y gasto acumulado (M). Escala común para lectura rápida.</p>
+
+    <div class="grid-2">
+      <div class="chart-card">
+        <h3>Recency (R) — % ingresos</h3>
+        <div class="chart-h"><canvas id="chartR"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Frequency (F) — % ingresos</h3>
+        <div class="chart-h"><canvas id="chartF"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-top:1rem;">
+      <h3>Monetary (M) — % ingresos</h3>
+      <div class="chart-h"><canvas id="chartM"></canvas></div>
+    </div>
+
+    <h2><span class="num">02</span> Clientes e ingresos por valor RFM (R+F+M)</h2>
+    <p class="lead">Agregación en tres bandas para decisión: alto (≥12), medio (8–11), bajo (&lt;8).</p>
+
+    <div class="grid-2">
+      <div class="chart-card">
+        <h3>% de clientes por banda</h3>
+        <div class="chart-h"><canvas id="chartBandsClients"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>% de ingresos por banda</h3>
+        <div class="chart-h"><canvas id="chartBandsRev"></canvas></div>
+      </div>
+    </div>
+
+    <table class="data">
+      <thead>
+        <tr><th>Segmento</th><th>% clientes</th><th>% ingresos</th><th>Interpretación</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Alto (valor ≥ 12)</td><td>9,87</td><td>31,91</td><td>VIP y core de margen: retención y experiencia premium.</td></tr>
+        <tr><td>Medio (8–11)</td><td>33,61</td><td>41,69</td><td>Mayor peso en facturación: upsell y 2ª compra.</td></tr>
+        <tr><td>Bajo (&lt; 8)</td><td>56,52</td><td>26,40</td><td>Volumen; win-back económico o descarte de spam.</td></tr>
+      </tbody>
+    </table>
+
+    <h2><span class="num">03</span> LTV y reglas de inversión</h2>
+    <p class="lead">
+      El <strong>LTV a 3 meses</strong> muestra una mediana en torno a <strong>31 €</strong> (cohorte analizada). La dispersión es alta; para presupuestos de paid media conviene trabajar con medianas y percentiles.
+      Como referencia prudente, el <strong>CPA</strong> debería situarse con holgura por debajo del LTV3M (orden de <strong>10–15 €</strong>) hasta disponer de LTV6M/LTV12M.
+    </p>
+    <div class="insight-box">
+      <strong>Cohortes:</strong> el análisis señala que una proporción muy elevada de clientes nuevos deja de estar activa ya en el segundo mes. Eso refuerza la prioridad de un <strong>plan de contacto en las primeras semanas</strong> post-compra, no solo campañas de captación.
+    </div>
+
+    <h2><span class="num">04</span> Conclusiones y acciones (priorizadas)</h2>
+    <div class="actions">
+      <div class="action">
+        <span class="tag tag-p1">Prioridad 1</span>
+        <h4>Fidelización tras la primera compra</h4>
+        <p>Atacar el 78,8 % de clientes con F=1: automatizaciones, segunda compra incentivada con margen controlado, contenido de uso y recordatorios de reposición típicos del cosmético.</p>
+      </div>
+      <div class="action">
+        <span class="tag tag-p1">Prioridad 1</span>
+        <h4>Segmento “valor medio” (RFM 8–11)</h4>
+        <p>Concentra el mayor % de ingresos con un tercio de la base. Pruebas de bundles, recomendaciones y cross-sell; medir segunda compra a 30/60 días.</p>
+      </div>
+      <div class="action">
+        <span class="tag tag-p2">Prioridad 2</span>
+        <h4>VIP y M alto</h4>
+        <p>~20 % de clientes en M=5 genera ~59 % de ingresos: reglas de exclusión de descuentos masivos, acceso anticipado y servicio preferente.</p>
+      </div>
+      <div class="action">
+        <span class="tag tag-p2">Prioridad 2</span>
+        <h4>Reactivación por recencia (R bajo)</h4>
+        <p>Campañas de win-back segmentadas; evitar cannibalizar clientes con alto histórico de gasto sin reglas de oferta.</p>
+      </div>
+      <div class="action">
+        <span class="tag tag-p3">Prioridad 3</span>
+        <h4>Datos y tablero</h4>
+        <p>Seguimiento mensual: 2ª compra en ventana móvil, concentración Pareto, CAC por canal vs. LTV. Ampliar histórico para LTV6M/12M.</p>
+      </div>
+    </div>
+
+    <footer>
+      Documento generado para presentación interna. Fuentes: proyecto-objetivos.md, notebooks/02_AnalisisInsights.ipynb (RFM, LTV3M, insights de clientes y cohortes).
+    </footer>
+  </div>
+
+  <script>
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.15)';
+    const barOpts = {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(148,163,184,0.1)' }, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    };
+
+    new Chart(document.getElementById('chartR'), {
+      type: 'bar',
+      data: {
+        labels: ['R1 (más antiguo)', 'R2', 'R3', 'R4', 'R5 (más reciente)'],
+        datasets: [{
+          data: [14.35, 16.64, 17.62, 20.77, 30.62],
+          backgroundColor: ['#64748b', '#64748b', '#38bdf8', '#38bdf8', '#22d3ee'],
+          borderRadius: 6
+        }]
+      },
+      options: barOpts
+    });
+
+    new Chart(document.getElementById('chartF'), {
+      type: 'bar',
+      data: {
+        labels: ['F1 (1 compra)', 'F3 (2–3 compras)', 'F5 (4+ compras)'],
+        datasets: [{
+          data: [53.28, 28.22, 18.50],
+          backgroundColor: ['#fb7185', '#a78bfa', '#34d399'],
+          borderRadius: 6
+        }]
+      },
+      options: barOpts
+    });
+
+    new Chart(document.getElementById('chartM'), {
+      type: 'bar',
+      data: {
+        labels: ['M1', 'M2', 'M3', 'M4', 'M5'],
+        datasets: [{
+          data: [3.55, 6.74, 11.71, 19.09, 58.92],
+          backgroundColor: ['#475569', '#64748b', '#94a3b8', '#38bdf8', '#818cf8'],
+          borderRadius: 6
+        }]
+      },
+      options: barOpts
+    });
+
+    const doughnutOpts = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 14, font: { size: 12 } } }
+      }
+    };
+
+    new Chart(document.getElementById('chartBandsClients'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Alto (≥12)', 'Medio (8–11)', 'Bajo (<8)'],
+        datasets: [{
+          data: [9.87, 33.61, 56.52],
+          backgroundColor: ['#34d399', '#38bdf8', '#64748b'],
+          borderWidth: 0
+        }]
+      },
+      options: doughnutOpts
+    });
+
+    new Chart(document.getElementById('chartBandsRev'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Alto (≥12)', 'Medio (8–11)', 'Bajo (<8)'],
+        datasets: [{
+          data: [31.91, 41.69, 26.40],
+          backgroundColor: ['#34d399', '#38bdf8', '#64748b'],
+          borderWidth: 0
+        }]
+      },
+      options: doughnutOpts
+    });
+  </script>
+</body>
+</html>
